@@ -77,3 +77,43 @@ body {
     margin-top: 1rem;
   }
 }
+.miniatura {
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.miniatura:hover {
+  transform: scale(1.1);
+}
+
+.color-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.color-circle:hover {
+  transform: scale(1.2);
+}
+
+.color-activo {
+  outline: 3px solid #000;
+}
+.medida-btn.active {
+  background-color: #000;
+  color: #fff;
+}
+
+.color-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.color-circle.active {
+  outline: 3px solid #000;
+}
