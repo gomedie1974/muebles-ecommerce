@@ -209,13 +209,20 @@ function verificarUsuario(){
 // ===========================
 function logout(){
 
+  // borrar carrito
+  localStorage.removeItem("carrito");
+
+  // opcional: borrar otros datos si tenés
+  localStorage.removeItem("checkout");
+
   firebase.auth().signOut().then(()=>{
 
-    window.location.href = "index.html";
+    window.location.href="index.html";
 
   });
 
 }
+
 
 
 
