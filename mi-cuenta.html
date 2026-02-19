@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Mi cuenta | Glattam Amoblamientos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<style>
+
+html, body{
+height:100%;
+}
+
+body{
+display:flex;
+flex-direction:column;
+min-height:100vh;
+background:#f8f9fa;
+}
+
+main{
+flex:1;
+}
+
+/* Card cuenta */
+.card-cuenta{
+border:none;
+border-radius:12px;
+box-shadow:0 4px 15px rgba(0,0,0,0.08);
+transition:0.3s;
+background:white;
+}
+
+.card-cuenta:hover{
+box-shadow:0 8px 25px rgba(0,0,0,0.12);
+}
+
+.avatar{
+width:70px;
+height:70px;
+background:#212529;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:50%;
+font-size:30px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div id="navbar-container"></div>
+
+<!-- CONTENIDO -->
+<main>
+
+<div class="container my-5">
+
+<h2 class="mb-4">
+<i class="bi bi-person"></i>
+Mi cuenta
+</h2>
+
+<div class="row justify-content-center">
+
+<div class="col-md-6">
+
+<div class="card card-cuenta p-4">
+
+<div class="d-flex align-items-center gap-3 mb-3">
+
+<div class="avatar">
+<i class="bi bi-person"></i>
+</div>
+
+<div>
+<h5 id="nombreUsuario" class="mb-0">Cargando...</h5>
+<div id="emailUsuario" class="text-muted small"></div>
+</div>
+
+</div>
+
+<hr>
+
+<div class="d-grid gap-2">
+
+<a href="mis-pedidos.html" class="btn btn-outline-dark">
+<i class="bi bi-bag"></i>
+Mis pedidos
+</a>
+
+<button onclick="logout()" class="btn btn-dark">
+<i class="bi bi-box-arrow-right"></i>
+Cerrar sesión
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<div id="footer"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<!-- Config Firebase -->
+<script src="js/firebase.js"></script>
+
+<!-- Navbar y Footer -->
+<script src="js/navbar.js"></script>
+<script src="js/footer.js"></script>
+
+<script>
+
+auth.onAuthStateChanged(async user => {
+
+if(!user){
+window.location.href="login.html";
+return;
+}
+
+try{
+
+const doc = await db.collection("usuarios").doc(user.uid).get();
+
+const nombre = doc.exists ? doc.data().nombre : "Usuario";
+
+document.getElementById("nombreUsuario").innerText = nombre;
+document.getElementById("emailUsuario").innerText = user.email;
+
+}catch(error){
+
+document.getElementById("nombreUsuario").innerText = "Usuario";
+document.getElementById("emailUsuario").innerText = user.email;
+
+}
+
+});
+
+
+function logout(){
+
+auth.signOut().then(()=>{
+window.location.href="index.html";
+});
+
+}
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
