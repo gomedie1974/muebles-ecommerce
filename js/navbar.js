@@ -8,7 +8,7 @@ function cargarNavbar() {
       <div class="container">
 
         <a class="navbar-brand fw-bold" href="index.html">
-          Muebles Nórdicos
+          Glattam Muebles 
         </a>
 
         <button class="navbar-toggler" type="button"
