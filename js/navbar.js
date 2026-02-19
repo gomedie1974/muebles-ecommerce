@@ -44,7 +44,7 @@ function cargarNavbar() {
   document.getElementById("navbar-container").innerHTML = navbar;
 
   actualizarContadorGlobal();
-  verificarUsuario();
+  
 }
 
 
@@ -140,5 +140,18 @@ function logout(){
 
 }
 
+document.addEventListener("DOMContentLoaded", () => {
 
-document.addEventListener("DOMContentLoaded", cargarNavbar);
+  cargarNavbar();
+
+  // Esperar a que Firebase esté disponible
+  const checkFirebase = setInterval(() => {
+
+    if (typeof firebase !== "undefined" && firebase.apps.length > 0) {
+      clearInterval(checkFirebase);
+      verificarUsuario();
+    }
+
+  }, 100);
+
+});
