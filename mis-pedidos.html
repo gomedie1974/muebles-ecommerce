@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Mis pedidos | Glattam Amoblamientos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body{
+background:#f8f9fa;
+}
+
+.card-pedido{
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.08);
+border:none;
+margin-bottom:20px;
+}
+
+.producto-item{
+border-bottom:1px solid #eee;
+padding:5px 0;
+}
+
+html, body{
+height:100%;
+}
+
+body{
+display:flex;
+flex-direction:column;
+min-height:100vh;
+background:#f8f9fa;
+}
+
+main{
+flex:1;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="navbar-container"></div>
+
+<main>
+<div class="container my-5">
+
+<h2 class="mb-4">Mis pedidos</h2>
+
+<div id="lista-pedidos">
+
+<div class="text-muted">
+Cargando pedidos...
+</div>
+
+</div>
+
+</div>
+
+
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script src="js/firebase.js"></script>
+
+
+
+<script>
+
+const contenedor = document.getElementById("lista-pedidos");
+
+auth.onAuthStateChanged(async user => {
+
+if(!user){
+
+alert("Debes iniciar sesión");
+
+window.location.href="login.html";
+
+return;
+
+}
+
+try{
+
+const snapshot = await db
+.collection("pedidos")
+.where("userId","==",user.uid)
+.get();
+
+if(snapshot.empty){
+
+contenedor.innerHTML = `
+<div class="alert alert-info">
+No tenés pedidos todavía.
+</div>
+`;
+
+return;
+
+}
+
+contenedor.innerHTML = "";
+
+snapshot.forEach(doc => {
+
+const pedido = doc.data();
+
+let productosHTML = "";
+
+pedido.productos.forEach(p=>{
+
+productosHTML += `
+<div class="producto-item">
+${p.nombre}  
+<br>
+<small>
+Cantidad: ${p.cantidad}  
+${p.medida ? " | Medida: "+p.medida : ""}  
+${p.color ? " | Color: "+p.color : ""}
+</small>
+</div>
+`;
+
+});
+
+contenedor.innerHTML += `
+
+<div class="card card-pedido p-3">
+
+<div class="d-flex justify-content-between">
+
+<div>
+
+<strong>Pedido:</strong> ${doc.id}
+
+</div>
+
+<div>
+
+<strong>Total:</strong> $${pedido.total.toLocaleString()}
+
+</div>
+
+</div>
+
+<div class="text-muted mb-2">
+${new Date(pedido.fecha.seconds * 1000).toLocaleString()}
+</div>
+
+<div>
+${productosHTML}
+</div>
+
+</div>
+
+`;
+
+});
+
+}catch(error){
+
+contenedor.innerHTML = `
+<div class="alert alert-danger">
+Error al cargar pedidos
+</div>
+`;
+
+console.error(error);
+
+}
+
+});
+
+</script>
+</div>
+</main>
+
+<div id="footer"></div>
+
+<script src="./js/navbar.js"></script>
+<script src="./js/footer.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro Visual | Glattam Amoblamientos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    body {
+      background-image: url(./img/e7334e92-banner.jpg);
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container-registro {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .card-registro {
+      background: #fff;
+      border-radius: 20px;
+      padding: 60px 50px;
+      width: 100%;
+      max-width: 700px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+    }
+
+    .card-registro h3 {
+      color: #343a40;
+      margin-bottom: 35px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #adb5bd;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      padding-left: 40px;
+    }
+
+    .btn-registro {
+      background-color: #343a40;
+      border: none;
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+
+    .btn-registro:hover {
+      background-color: #495057;
+    }
+
+    p.text-center a {
+      color: #343a40;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    p.text-center a:hover {
+      color: #495057;
+    }
+
+    @media (max-width: 991px) {
+      .card-registro {
+        max-width: 100%;
+        padding: 40px 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="navbar-container"></div>
+
+<div class="container-registro">
+  <div class="card card-registro">
+    <h3 class="text-center">Crear cuenta</h3>
+
+    <div class="mb-3 input-wrapper">
+      <i class="bi bi-person icon-input"></i>
+      <input type="text" id="nombre" class="form-control" placeholder="Nombre">
+    </div>
+
+    <div class="mb-3 input-wrapper">
+      <i class="bi bi-person icon-input"></i>
+      <input type="text" id="apellido" class="form-control" placeholder="Apellido">
+    </div>
+
+    <div class="mb-3 input-wrapper">
+      <i class="bi bi-geo-alt icon-input"></i>
+      <input type="text" id="domicilio" class="form-control" placeholder="Domicilio">
+    </div>
+
+    <div class="mb-3 input-wrapper">
+      <i class="bi bi-building icon-input"></i>
+      <input type="text" id="localidad" class="form-control" placeholder="Localidad">
+    </div>
+
+    <div class="mb-3 input-wrapper">
+      <i class="bi bi-telephone icon-input"></i>
+      <input type="text" id="telefono" class="form-control" placeholder="Teléfono">
+    </div>
+
+    <div class="mb-3 input-wrapper">
+      <i class="bi bi-envelope icon-input"></i>
+      <input type="email" id="email" class="form-control" placeholder="Email" autocomplete="off">
+    </div>
+
+    <div class="mb-3 input-wrapper">
+      <i class="bi bi-lock icon-input"></i>
+      <input type="password" id="password" class="form-control" placeholder="Contraseña" autocomplete="new-password">
+    </div>
+
+    <button class="btn btn-primary w-100 mb-3" id="btnRegister">Registrarse</button>
+
+    <p class="text-center text-muted">
+      ¿Ya tenés cuenta? <a href="login.html">Iniciar sesión</a>
+    </p>
+  </div>
+</div>
+
+<div id="footer"></div>
+
+<script src="js/navbar.js"></script>
+<script src="js/footer.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCU79ZWBAHThRPVp44voMXIC42zq6abS4Y",
+  authDomain: "muebles-ecommerce-d8fc0.firebaseapp.com",
+  projectId: "muebles-ecommerce-d8fc0",
+  storageBucket: "muebles-ecommerce-d8fc0.firebasestorage.app",
+  messagingSenderId: "724872861374",
+  appId: "1:724872861374:web:d94cbd14d1b790d391b0ef",
+  measurementId: "G-59W8JTZPXR"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+document.getElementById("btnRegister").addEventListener("click", () => {
+  const nombre = document.getElementById("nombre").value.trim();
+  const apellido = document.getElementById("apellido").value.trim();
+  const domicilio = document.getElementById("domicilio").value.trim();
+  const localidad = document.getElementById("localidad").value.trim();
+  const telefono = document.getElementById("telefono").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  if (!nombre || !apellido || !domicilio || !localidad || !telefono || !email || !password) {
+    alert("Por favor completá todos los campos");
+    return;
+  }
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(userCredential => {
+      const user = userCredential.user;
+      db.collection("usuarios").doc(user.uid).set({
+        nombre,
+        apellido,
+        domicilio,
+        localidad,
+        telefono,
+        email
+      }).then(() => {
+        alert("Registro exitoso!");
+        window.location.href = "index.html";
+      });
+    })
+    .catch(error => {
+      if (error.code === "auth/email-already-in-use") {
+        alert("Este correo ya está registrado. Por favor iniciá sesión o usá otro email.");
+      } else {
+        alert("Error: " + error.message);
+      }
+    });
+});
+</script>
+
+</body>
+</html>
