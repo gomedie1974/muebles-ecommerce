@@ -101,7 +101,16 @@ function verificarUsuario(){
 
   if(!area) return;
 
-  if(typeof firebase === "undefined"){
+  // detectar página actual
+  const paginaActual = window.location.href.toLowerCase();
+
+const esPaginaCuenta =
+  paginaActual.includes("/mi-cuenta") ||
+  paginaActual.includes("/mis-pedidos");
+
+  console.log("URL:", window.location.href);
+console.log("esPaginaCuenta:", esPaginaCuenta);
+    if(typeof firebase === "undefined"){
 
     area.innerHTML = `
       <a href="login.html" class="nav-link fs-5">
@@ -127,50 +136,70 @@ function verificarUsuario(){
 
         const nombre = doc.exists ? doc.data().nombre : "Usuario";
 
-        area.innerHTML = `
+        // ===========================
+        // SI ESTA EN MI CUENTA O MIS PEDIDOS
+        // ===========================
+        if(esPaginaCuenta){
 
-          <div class="dropdown">
+          area.innerHTML = `
+            <a href="tienda.html"
+               class="btn btn-outline-dark btn-sm">
 
-            <button class="btn btn-outline-dark btn-sm dropdown-toggle"
-              data-bs-toggle="dropdown">
+               <i class="bi bi-arrow-left me-1"></i>
+               Volver a la tienda
 
-              Hola, ${nombre}
+            </a>
+          `;
 
-            </button>
+        }
+        else{
 
-            <ul class="dropdown-menu dropdown-menu-end shadow">
+          area.innerHTML = `
 
-              <li>
-                <a class="dropdown-item" href="mi-cuenta.html">
-                  <i class="bi bi-person me-2"></i>
-                  Mi cuenta
-                </a>
-              </li>
+            <div class="dropdown">
 
-              <li>
-                <a class="dropdown-item" href="mis-pedidos.html">
-                  <i class="bi bi-bag me-2"></i>
-                  Mis pedidos
-                </a>
-              </li>
+              <button class="btn btn-outline-dark btn-sm dropdown-toggle"
+                data-bs-toggle="dropdown">
 
-              <li><hr class="dropdown-divider"></li>
+                Hola, ${nombre}
 
-              <li>
-                <button onclick="logout()"
-                  class="dropdown-item text-danger">
+              </button>
 
-                  <i class="bi bi-box-arrow-right me-2"></i>
-                  Cerrar sesión
+              <ul class="dropdown-menu dropdown-menu-end shadow">
 
-                </button>
-              </li>
+                <li>
+                  <a class="dropdown-item" href="mi-cuenta.html">
+                    <i class="bi bi-person me-2"></i>
+                    Mi cuenta
+                  </a>
+                </li>
 
-            </ul>
+                <li>
+                  <a class="dropdown-item" href="mis-pedidos.html">
+                    <i class="bi bi-bag me-2"></i>
+                    Mis pedidos
+                  </a>
+                </li>
 
-          </div>
+                <li><hr class="dropdown-divider"></li>
 
-        `;
+                <li>
+                  <button onclick="logout()"
+                    class="dropdown-item text-danger">
+
+                    <i class="bi bi-box-arrow-right me-2"></i>
+                    Cerrar sesión
+
+                  </button>
+                </li>
+
+              </ul>
+
+            </div>
+
+          `;
+
+        }
 
       }
       catch(error){
@@ -205,10 +234,7 @@ function verificarUsuario(){
 // ===========================
 function logout(){
 
-  // borrar carrito
   localStorage.removeItem("carrito");
-
-  // opcional: borrar otros datos si tenés
   localStorage.removeItem("checkout");
 
   firebase.auth().signOut().then(()=>{
@@ -221,7 +247,6 @@ function logout(){
 
 
 
-
 // ===========================
 // INICIAR
 // ===========================
@@ -229,16 +254,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   cargarNavbar();
 
+  esperarFirebaseYUsuario();
+
+});
+
+
+
+// ===========================
+// ESPERAR FIREBASE Y DOM
+// ===========================
+function esperarFirebaseYUsuario(){
+
   const intervalo = setInterval(()=>{
 
-    if(typeof firebase !== "undefined" && firebase.apps.length > 0){
+    const area = document.getElementById("usuario-area");
 
+    if(
+      typeof firebase !== "undefined" &&
+      firebase.apps.length > 0 &&
+      area
+    ){
       clearInterval(intervalo);
 
       verificarUsuario();
-
     }
 
   },100);
 
-});
+}
