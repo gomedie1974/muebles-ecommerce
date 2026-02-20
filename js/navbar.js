@@ -4,7 +4,7 @@
 function cargarNavbar() {
 
   const navbar = `
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3 fixed-top">
       <div class="container">
 
         <a class="navbar-brand fw-bold" href="index.html">
@@ -49,7 +49,7 @@ function cargarNavbar() {
 
             <!-- Carrito -->
             <a href="carrito.html" class="nav-link position-relative">
-              <i class="bi bi-cart3 fs-4"></i>
+              <i class="bi bi-cart4 fs-4"></i>
               <span id="contador-carrito"
                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                 0
