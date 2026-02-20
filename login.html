@@ -50,6 +50,15 @@ body{
   border-radius:10px;
 }
 
+.eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #999;
+}
+
 </style>
 
 </head>
@@ -69,6 +78,7 @@ body{
 <div class="input-wrapper">
 <i class="bi bi-lock"></i>
 <input type="password" id="password" class="form-control" placeholder="Contraseña">
+<i class="bi bi-eye eye-icon" id="eyeIcon"></i>
 </div>
 
 <button class="btn btn-dark w-100" id="btnLogin">
@@ -89,6 +99,7 @@ Ingresar
 
 <script>
 
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyCU79ZWBAHThRPVp44voMXIC42zq6abS4Y",
   authDomain: "muebles-ecommerce-d8fc0.firebaseapp.com",
@@ -102,25 +113,28 @@ firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 
-document.getElementById("btnLogin").addEventListener("click", ()=>{
+// Iniciar sesión
+document.getElementById("btnLogin").addEventListener("click", () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
-
-auth.signInWithEmailAndPassword(email,password)
-
-.then(()=>{
-
-window.location.href="index.html";
-
-})
-
-.catch(error=>{
-
-alert("Error: "+error.message);
-
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      window.location.href = "index.html";
+    })
+    .catch(error => {
+      alert("Error: " + error.message);
+    });
 });
 
+// Mostrar/ocultar contraseña
+const eyeIcon = document.getElementById("eyeIcon");
+const passwordField = document.getElementById("password");
+
+eyeIcon.addEventListener("click", () => {
+  const type = passwordField.type === "password" ? "text" : "password";
+  passwordField.type = type;
+  eyeIcon.classList.toggle("bi-eye-slash");
 });
 
 </script>

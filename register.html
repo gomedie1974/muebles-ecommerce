@@ -52,6 +52,16 @@
     .form-control {
       border-radius: 10px;
       padding-left: 40px;
+      padding-right: 40px; /* Espacio para el ojo */
+    }
+
+    .eye-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #adb5bd;
     }
 
     .btn-registro {
@@ -121,9 +131,11 @@
       <input type="email" id="email" class="form-control" placeholder="Email" autocomplete="off">
     </div>
 
+    <!-- Campo de contraseña con ojito -->
     <div class="mb-3 input-wrapper">
       <i class="bi bi-lock icon-input"></i>
       <input type="password" id="password" class="form-control" placeholder="Contraseña" autocomplete="new-password">
+      <i class="bi bi-eye eye-icon" id="eyeIcon"></i> <!-- Aquí está el icono del ojo -->
     </div>
 
     <button class="btn btn-primary w-100 mb-3" id="btnRegister">Registrarse</button>
@@ -147,6 +159,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script>
+// Configuración de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCU79ZWBAHThRPVp44voMXIC42zq6abS4Y",
   authDomain: "muebles-ecommerce-d8fc0.firebaseapp.com",
@@ -161,6 +174,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+// Registro de usuario
 document.getElementById("btnRegister").addEventListener("click", () => {
   const nombre = document.getElementById("nombre").value.trim();
   const apellido = document.getElementById("apellido").value.trim();
@@ -197,6 +211,16 @@ document.getElementById("btnRegister").addEventListener("click", () => {
         alert("Error: " + error.message);
       }
     });
+});
+
+// Mostrar/ocultar contraseña con el icono de ojo
+const eyeIcon = document.getElementById("eyeIcon");
+const passwordField = document.getElementById("password");
+
+eyeIcon.addEventListener("click", () => {
+  const type = passwordField.type === "password" ? "text" : "password";
+  passwordField.type = type;
+  eyeIcon.classList.toggle("bi-eye-slash");
 });
 </script>
 
