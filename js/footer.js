@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           <!-- CENTRO: Contacto y redes -->
           <div class="col-md-3 text-center mb-3 mb-md-0">
-            <h6 class="fw-bold mb-3">Contáctanos</h6>
+            <h6 class="fw-bold mb-3">Contacto</h6>
             <p class="small mb-1">info@glattanmuebles.com</p>
             <p class="small mb-1">+54 11 4168-5220</p>
             <div>
