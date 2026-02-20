@@ -117,3 +117,17 @@ body {
 .color-circle.active {
   outline: 3px solid #000;
 }
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto; /* ocupa todo el espacio restante */
+}
+
+footer {
+  flex-shrink: 0; /* nunca se achica */
+}
