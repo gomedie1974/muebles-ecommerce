@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
 <style>
+
 html, body{
 height:100%;
 }
@@ -30,12 +31,6 @@ border-radius:12px;
 box-shadow:0 4px 12px rgba(0,0,0,0.08);
 border:none;
 margin-bottom:20px;
-transition:0.3s;
-}
-
-.card-pedido:hover{
-transform:translateY(-3px);
-box-shadow:0 8px 20px rgba(0,0,0,0.12);
 }
 
 .producto-item{
@@ -46,6 +41,7 @@ padding:8px 0;
 .producto-item:last-child{
 border-bottom:none;
 }
+
 </style>
 
 </head>
@@ -55,6 +51,7 @@ border-bottom:none;
 <div id="navbar-container"></div>
 
 <main>
+
 <div class="container my-5">
 
 <h2 class="mb-4">
@@ -65,41 +62,46 @@ Mis pedidos
 <div id="lista-pedidos"></div>
 
 </div>
+
 </main>
 
 <div id="footer"></div>
 
-<!-- Firebase primero -->
+
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script src="js/firebase.js"></script>
 
-<!-- Navbar y Footer -->
 <script src="js/navbar.js"></script>
 <script src="js/footer.js"></script>
 
-<!-- SCRIPT PRINCIPAL (ahora sí al final) -->
+
 <script>
 
 const contenedor = document.getElementById("lista-pedidos");
 
-// Spinner
 contenedor.innerHTML = `
 <div class="text-center py-5">
+
 <div class="spinner-border text-dark mb-3"></div>
+
 <div class="text-muted">
 Cargando tus pedidos...
 </div>
+
 </div>
 `;
 
 auth.onAuthStateChanged(async user => {
 
 if(!user){
+
 window.location.href="login.html";
 return;
+
 }
 
 try{
@@ -110,10 +112,12 @@ const snapshot = await db
 .orderBy("fecha","desc")
 .get();
 
+
 if(snapshot.empty){
 
 contenedor.innerHTML = `
 <div class="card border-0 shadow-sm text-center py-5">
+
 <div class="card-body">
 
 <i class="bi bi-bag-x fs-1 text-muted"></i>
@@ -127,17 +131,21 @@ Cuando realices una compra aparecerá aquí
 </p>
 
 <a href="tienda.html" class="btn btn-dark mt-2">
-Ir a la tienda
+Volver a la tienda
 </a>
 
 </div>
+
 </div>
 `;
 
 return;
+
 }
 
+
 contenedor.innerHTML = "";
+
 
 snapshot.forEach(doc => {
 
@@ -149,12 +157,11 @@ pedido.productos.forEach(p=>{
 
 productosHTML += `
 <div class="producto-item">
+
 <strong>${p.nombre}</strong>
 
 <div class="text-muted small">
 Cantidad: ${p.cantidad}
-${p.medida ? " | Medida: "+p.medida : ""}
-${p.color ? " | Color: "+p.color : ""}
 </div>
 
 </div>
@@ -162,15 +169,23 @@ ${p.color ? " | Color: "+p.color : ""}
 
 });
 
+
 contenedor.innerHTML += `
 
 <div class="card card-pedido p-4">
 
-<div class="d-flex justify-content-between align-items-center mb-2">
+<div class="d-flex justify-content-between">
 
 <div>
-<span class="badge bg-dark">Pedido</span>
-<span class="text-muted small ms-2">${doc.id}</span>
+
+<span class="badge bg-dark">
+Pedido
+</span>
+
+<span class="text-muted small ms-2">
+${doc.id}
+</span>
+
 </div>
 
 <div class="fw-bold fs-5">
@@ -179,15 +194,19 @@ $${pedido.total.toLocaleString()}
 
 </div>
 
+
 <div class="text-muted small mb-3">
+
 <i class="bi bi-calendar"></i>
 
-${pedido.fecha.seconds 
-? new Date(pedido.fecha.seconds * 1000).toLocaleString()
+${
+pedido.fecha?.seconds
+? new Date(pedido.fecha.seconds*1000).toLocaleString()
 : new Date(pedido.fecha).toLocaleString()
 }
 
 </div>
+
 
 ${productosHTML}
 
@@ -197,12 +216,13 @@ ${productosHTML}
 
 });
 
+
 }catch(error){
 
 console.error(error);
 
 contenedor.innerHTML = `
-<div class="text-center py-5 text-danger">
+<div class="text-danger text-center py-5">
 Error al cargar pedidos
 </div>
 `;
@@ -212,6 +232,7 @@ Error al cargar pedidos
 });
 
 </script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
