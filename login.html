@@ -85,6 +85,9 @@ body{
 Ingresar
 </button>
 
+<p class="text-center mt-2">
+  <a href="#" id="forgotPassword">¿Olvidaste tu contraseña?</a>
+</p>
 <p class="text-center mt-3">
 ¿No tenés cuenta?
 <a href="./register.html">Registrarse</a>
@@ -93,7 +96,7 @@ Ingresar
 </div>
 
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
@@ -137,6 +140,42 @@ eyeIcon.addEventListener("click", () => {
   eyeIcon.classList.toggle("bi-eye-slash");
 });
 
+// Recuperar contraseña con SweetAlert
+document.getElementById("forgotPassword").addEventListener("click", () => {
+
+  Swal.fire({
+    title: "Recuperar contraseña",
+    input: "email",
+    inputLabel: "Ingresa tu email",
+    inputPlaceholder: "ejemplo@email.com",
+    confirmButtonText: "Enviar",
+    showCancelButton: true,
+    cancelButtonText: "Cancelar"
+  }).then((result) => {
+
+    if (result.isConfirmed && result.value) {
+
+      auth.sendPasswordResetEmail(result.value)
+        .then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "Email enviado",
+            text: "Revisa tu bandeja de entrada para restablecer tu contraseña."
+          });
+        })
+        .catch(error => {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error.message
+          });
+        });
+
+    }
+
+  });
+
+});
 </script>
 
 </body>

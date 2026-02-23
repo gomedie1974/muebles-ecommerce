@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="d-flex align-items-center">
               <img src="./img/dg sin fondo.png" alt="DG" class="footer-logo me-2">
               <a href="http://gomezdiego.com.ar" target="_blank" class="footer-link">
-                Powered by DG Diseños Web
+                Powered by DG 
               </a>
             </div>
 
