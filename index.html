@@ -20,16 +20,60 @@
     <p class="lead">Muebles modernos, funcionales y elegantes</p>
   </div>
 </section>
+
+
+
  
+<section class="best-sellers-section py-5">
+  <div class="container">
 
+    <!-- Encabezado elegante -->
+    <div class="text-center mb-5">
+      <p class="section-tag">COLECCIÓN DESTACADA</p>
+      <h2 class="section-title">Los más vendidos</h2>
+    </div>
 
-<section class="container my-5">
-  <h2 class="text-center mb-4" style="font-family: Helvetica Neue; font-weight: bold;">LOS MÁS VENDIDOS</h2>
+    <div class="row g-4" id="contenedor-productos"></div>
+    
 
-  <div class="row" id="contenedor-productos"></div>
+  </div>
 </section>
 
 
+<!-- Sección Contadores -->
+<section class="stats-black py-5">
+  <div class="container">
+    <div class="row text-center g-5">
+
+      <div class="col-6 col-md-3 stat-item">
+        <i class="bi bi-building stat-icon"></i>
+        <h2 class="counter stat-number" data-target="250">0</h2>
+        <p class="stat-label">Proyectos</p>
+      </div>
+
+      <div class="col-6 col-md-3 stat-item">
+        <i class="bi bi-people stat-icon"></i>
+        <h2 class="counter stat-number" data-target="180">0</h2>
+        <p class="stat-label">Clientes</p>
+      </div>
+
+      <div class="col-6 col-md-3 stat-item">
+        <i class="bi bi-award stat-icon"></i>
+        <h2 class="counter stat-number" data-target="15">0</h2>
+        <p class="stat-label">Años</p>
+      </div>
+
+      <div class="col-6 col-md-3 stat-item">
+        <i class="bi bi-hammer stat-icon"></i>
+        <h2 class="counter stat-number" data-target="12">0</h2>
+        <p class="stat-label">En Curso</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr>
 
 <!-- Toast Producto Agregado -->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
@@ -49,6 +93,7 @@
     </div>
   </div>
 </div>
+
 
 <div id="footer"></div>
 
@@ -83,6 +128,168 @@ console.log("No hay usuario logueado");
 
 </script>
 
+<style>
+  
+/* Fondo negro mate estilo Apple */
+.stats-black {
+  background: linear-gradient(180deg, #0f0f0f 0%, #141414 100%);
+  background-attachment: fixed;
+  padding-top: 120px;
+  padding-bottom: 120px;
+}
 
+/* Animación fade + subida suave */
+.stat-item {
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
+}
+
+.stat-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stat-icon {
+  color: rgba(255,255,255,0.4);
+  font-size: 20px;
+  margin-bottom: 18px;
+}
+
+.stat-number {
+  font-size: 36px;
+  font-weight: 400;
+  letter-spacing: -2px;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+/* Separadores verticales ultra finos */
+@media (min-width: 768px) {
+   
+  .stat-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 15%;
+    right: 0;
+    width: 1px;
+    height: 70%;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(255, 255, 255, 0.15),
+      transparent
+    );
+  }
+ @media (max-width: 768px) {
+  .stats-black {
+    padding-top: 90px;
+    padding-bottom: 90px;
+  }
+
+  .stat-number {
+    font-size: 44px;
+  }
+} 
+  /* Animación base */
+.stat-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Sección Best Sellers */
+.best-sellers-section {
+  background-color: #f8f8f8;
+  padding-top: 120px;
+  padding-bottom: 120px;
+}
+
+/* Etiqueta pequeña superior */
+.section-tag {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: #999;
+  margin-bottom: 10px;
+}
+
+/* Título principal */
+.section-title {
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: -1px;
+  color: #111;
+}
+.section-title::after {
+  content: "";
+  display: block;
+  width: 140px;
+  height: 5px;
+  background-color: #ddd;
+  margin: 20px auto 0;
+}
+/* Ajuste mobile */
+@media (max-width: 768px) {
+  .best-sellers-section {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  .section-title {
+    font-size: 28px;
+  }
+}
+}
+
+</style>
+<!-- PROYECTOS REALIZADOS -->
+<script>
+const stats = document.querySelectorAll('.stat-item');
+
+const animateCounter = (counter) => {
+  const target = +counter.getAttribute('data-target');
+  let count = 0;
+  const duration = 1800;
+  const increment = target / (duration / 16);
+
+  const update = () => {
+    count += increment;
+    if (count < target) {
+      counter.innerText = Math.floor(count) + "+";
+      requestAnimationFrame(update);
+    } else {
+      counter.innerText = target + "+";
+    }
+  };
+
+  update();
+};
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+
+      stats.forEach((stat, index) => {
+        setTimeout(() => {
+          stat.classList.add("visible");
+          const counter = stat.querySelector('.counter');
+          animateCounter(counter);
+        }, index * 200); // 200ms entre cada uno
+      });
+
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.4 });
+
+// Observamos solo el contenedor completo
+observer.observe(document.querySelector('.stats-black'));
+</script>
 </body>
 </html>
