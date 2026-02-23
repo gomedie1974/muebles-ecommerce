@@ -18,7 +18,7 @@ function renderProductos(lista = productos) {
   const contenedor = document.getElementById("contenedor-productos");
   if (!contenedor) return;
 
-  contenedor.innerHTML = "";
+  contenedor.innerHTML = ""; // Limpiar el contenedor antes de agregar nuevos productos
 
   lista.forEach(prod => {
     const imagen = prod.imagenes ? prod.imagenes.Blanco : prod.imagen;
@@ -47,20 +47,25 @@ function renderProductos(lista = productos) {
 }
 
 /* ------------------ CARRITO ------------------ */
-function agregarAlCarrito(id, cantidad = 1, medida = "Estándar", color = "Blanco") {
+function agregarAlCarrito(id, cantidad = 1, medida = "Estándar", color = "Blanco", precioFinal = null) {
   const producto = productos.find(p => p.id === id);
   const existente = carrito.find(p => p.id === id && p.medida === medida && p.color === color);
+
+  const imagenSeleccionada = producto.imagenes 
+                              ? producto.imagenes[color] 
+                              : producto.imagen;
+
+  const precio = precioFinal !== null ? precioFinal : producto.precio;
 
   if (existente) {
     existente.cantidad += cantidad;
   } else {
-    carrito.push({ ...producto, cantidad, medida, color });
+    carrito.push({ ...producto, cantidad, medida, color, imagen: imagenSeleccionada, precio });
   }
 
   guardarCarrito();
   actualizarContador();
 
-  // Toast
   const toastElement = document.getElementById("toastCarrito");
   if (toastElement) {
     const toast = new bootstrap.Toast(toastElement);
@@ -77,7 +82,6 @@ function abrirModalProducto(id) {
 
   const contenido = document.getElementById("contenidoModalProducto");
 
-  // Generar botones dinámicos de medidas
   let botonesMedidasHTML = '';
   producto.medidas.forEach(medida => {
     botonesMedidasHTML += `
@@ -87,7 +91,6 @@ function abrirModalProducto(id) {
     `;
   });
 
-  // HTML del modal
   contenido.innerHTML = `
     <div class="row">
       <div class="col-md-6">
@@ -141,30 +144,27 @@ function abrirModalProducto(id) {
           <input type="number" id="cantidadProducto" class="form-control" value="1" min="1">
         </div>
 
-        <button class="btn btn-dark w-100 py-3 fw-semibold" id="btnAgregarModal">
+        <button class="btn btn-dark w-100 py-3 fw-semibold" id="btnAgregarModal" data-precio-final="${precioBase}">
           Agregar al carrito
         </button>
       </div>
     </div>
   `;
 
-  // Mostrar modal
   const modal = new bootstrap.Modal(document.getElementById("modalProducto"));
   modal.show();
 
-// Event listeners de medidas
-const botonesMedida = document.querySelectorAll(".medida-btn");
-botonesMedida.forEach(btn => {
-  btn.addEventListener("click", function() {
-    botonesMedida.forEach(b => b.classList.remove("active"));
-    this.classList.add("active");
-    
-    const nuevoPrecio = parseInt(this.dataset.extra); // reemplaza el precio por el valor de la medida
-    document.getElementById("precioModal").textContent = "$" + nuevoPrecio.toLocaleString();
+  const botonesMedida = document.querySelectorAll(".medida-btn");
+  botonesMedida.forEach(btn => {
+    btn.addEventListener("click", function() {
+      botonesMedida.forEach(b => b.classList.remove("active"));
+      this.classList.add("active");
+      const precioFinal = producto.precio + parseInt(this.dataset.extra);
+      document.getElementById("precioModal").textContent = "$" + precioFinal.toLocaleString();
+      document.getElementById("btnAgregarModal").dataset.precioFinal = precioFinal;
+    });
   });
-});
 
-  // Event listeners de colores
   const colores = document.querySelectorAll(".color-circle");
   colores.forEach(c => {
     c.addEventListener("click", function() {
@@ -176,13 +176,14 @@ botonesMedida.forEach(btn => {
     });
   });
 
-  // Agregar al carrito desde modal
   const btnAgregar = document.getElementById("btnAgregarModal");
   btnAgregar.addEventListener("click", () => {
     const cantidad = parseInt(document.getElementById("cantidadProducto").value);
     const medidaSeleccionada = document.querySelector(".medida-btn.active").textContent;
     const color = colorSeleccionado;
-    agregarAlCarrito(id, cantidad, medidaSeleccionada, color);
+    const precioFinal = parseInt(btnAgregar.dataset.precioFinal);
+
+    agregarAlCarrito(id, cantidad, medidaSeleccionada, color, precioFinal);
     modal.hide();
   });
 }
@@ -191,6 +192,7 @@ botonesMedida.forEach(btn => {
 const buscador = document.getElementById("buscador");
 const precioMin = document.getElementById("precioMin");
 const precioMax = document.getElementById("precioMax");
+const categoriaFiltro = document.getElementById("categoriaFiltro");
 const limpiarBtn = document.getElementById("limpiarFiltros");
 
 function aplicarFiltros() {
@@ -199,8 +201,12 @@ function aplicarFiltros() {
     const min = precioMin.value ? parseInt(precioMin.value) : 0;
     const max = precioMax.value ? parseInt(precioMax.value) : Infinity;
     const coincidePrecio = prod.precio >= min && prod.precio <= max;
-    return coincideNombre && coincidePrecio;
+
+    const coincideCategoria = categoriaFiltro.value === "" || prod.categoria === categoriaFiltro.value;
+
+    return coincideNombre && coincidePrecio && coincideCategoria;
   });
+  
   renderProductos(filtrados);
 }
 
@@ -208,15 +214,56 @@ if (buscador) {
   buscador.addEventListener("input", aplicarFiltros);
   precioMin.addEventListener("input", aplicarFiltros);
   precioMax.addEventListener("input", aplicarFiltros);
+  categoriaFiltro.addEventListener("change", aplicarFiltros);
 
   limpiarBtn.addEventListener("click", () => {
     buscador.value = "";
     precioMin.value = "";
     precioMax.value = "";
+    categoriaFiltro.value = "";
     renderProductos(productos);
   });
 }
 
+// Obtener todas las tarjetas de categoría
+const categoriaCards = document.querySelectorAll('.categoria-card');
+
+// Obtener el contenedor de productos
+const contenedorProductos = document.getElementById('contenedor-productos');
+
+// Filtrar productos por categoría
+function filtrarPorCategoria(categoria) {
+  // Si no se selecciona categoría, mostramos todos los productos
+  if (categoria === "todos") {
+    renderProductos(productos);
+  } else {
+    const productosFiltrados = productos.filter(prod => prod.categoria === categoria);
+    renderProductos(productosFiltrados);
+  }
+}
+
+// Agregar un evento de clic a cada tarjeta de categoría
+categoriaCards.forEach(card => {
+  card.addEventListener('click', () => {
+    const categoriaSeleccionada = card.getAttribute('data-categoria');
+    filtrarPorCategoria(categoriaSeleccionada);
+  });
+});
+
+// Si haces clic fuera de las categorías, muestra todos los productos
+const resetBtn = document.getElementById("resetCategorias");
+if (resetBtn) {
+  resetBtn.addEventListener("click", () => {
+    renderProductos(productos);
+  });
+}
+const verTodosBtn = document.getElementById("verTodosBtn");
+if (verTodosBtn) {
+  verTodosBtn.addEventListener("click", () => {
+    // Renderiza todos los productos
+    renderProductos(productos);
+  });
+}
 /* ------------------ INICIALIZACIÓN ------------------ */
-renderProductos();
+renderProductos(productos);
 actualizarContador();

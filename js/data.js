@@ -3,6 +3,7 @@ const productos = [
     id: 1,
     nombre: "Silla Escandinavo",
     precio: 450000,
+    categoria: "sillas",
     imagenes: {
       Blanco: "img/daniil-silantev-1P6AnKDw6S8-unsplash.jpg",
       Negro: "img/silla-negra.jpg",
@@ -18,6 +19,7 @@ const productos = [
     id: 2,
     nombre: "Cama",
     precio: 320000,
+    categoria: "camas",
     imagenes: {
       Blanco: "https://images.unsplash.com/photo-1615874959474-d609969a20ed"
     },
@@ -30,48 +32,52 @@ const productos = [
     id: 3,
     nombre: "Sillón Minimalista",
     precio: 320000,
+    categoria: "sillones",
     imagenes: {
       Blanco: "img/spacejoy-c0JoR_-2x3E-unsplash.jpg"
     },
     medidas: [
       { nombre: "Simple", extra: 0 },
-      { nombre: "King", extra: 50000 }
+      { nombre: "King", extra: 150000 }
     ]
   },
   {
     id: 4,
     nombre: "Mesa de luz",
     precio: 320000,
+    categoria: "mesas",
     imagenes: {
       Blanco: "img/Mesa-de-luz-Etna-scaled-1.webp"
     },
     medidas: [
       { nombre: "Simple", extra: 0 },
-      { nombre: "King", extra: 50000 }
+      { nombre: "King", extra: 43000 }
     ]
   },
   {
     id: 5,
     nombre: "Mesa Minimalista",
     precio: 320000,
+    categoria: "mesas",
     imagenes: {
       Blanco: "img/Mesa-Dynamo-scaled-1.webp"
     },
     medidas: [
       { nombre: "Simple", extra: 0 },
-      { nombre: "King", extra: 50000 }
+      { nombre: "King", extra: 22000 }
     ]
   },
   {
     id: 6,
     nombre: "Comoda Roble",
     precio: 320000,
+    categoria: "comodas",
     imagenes: {
       Blanco: "img/Comoda-Etna-scaled-1.webp"
     },
     medidas: [
       { nombre: "Simple", extra: 0 },
-      { nombre: "King", extra: 50000 }
+      { nombre: "King", extra: 5000 }
     ]
   }
 ];

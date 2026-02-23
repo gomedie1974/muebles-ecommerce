@@ -9,64 +9,151 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
+  <style>
+    /* Hero text shadow */
+    .hero-text {
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+    }
+
+    /* Cards hover effect */
+    .card-producto {
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .card-producto:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Sticky filtros */
+    .sticky-filtros {
+      position: sticky;
+      top: 20px;
+    }
+
+    /* Categorías */
+    .categoria-card img {
+      height: 150px;
+      object-fit: cover;
+    }
+  </style>
 </head>  
- 
 
 <body>
 
 <div id="navbar-container"></div>
 
 <!-- HERO -->
-<section class="bg-light py-5 text-center mb-4 text-white" style="background-image: url(./img/e7334e92-banner.jpg);">
+ <section class="hero d-flex align-items-center text-center">
   <div class="container">
-    <h1 class="fw-bold">Nuestra Tienda</h1>
-    <p>Descubrí todos nuestros productos</p>
+    <h1 class="fw-bold hero-text">Nuestra Tienda</h1>
+    <p class="hero-text">Descubrí todos nuestros productos</p>
   </div>
 </section>
 
-<!-- FILTROS -->
-<section class="container">
+<!-- CATEGORÍAS DESTACADAS -->
+<section class="container my-5">
+  <h2 class="fw-bold mb-4 text-center">Explorá por categoría</h2>
+  <div class="row g-4 text-center">
+    <div class="col-6 col-sm-4 col-md-2">
+      <div class="card categoria-card shadow-sm border-0" data-categoria="sillas">
+        <img src="img/silla.jpg" class="card-img-top img-fluid" alt="Sillas">
+        <div class="card-body">
+          <h6 class="card-title">Sillas</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-sm-4 col-md-2">
+      <div class="card categoria-card shadow-sm border-0" data-categoria="mesas">
+        <img src="img/categorias/mesas.jpg" class="card-img-top img-fluid" alt="Mesas">
+        <div class="card-body">
+          <h6 class="card-title">Mesas</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-sm-4 col-md-2">
+      <div class="card categoria-card shadow-sm border-0" data-categoria="camas">
+        <img src="img/categorias/camas.jpg" class="card-img-top img-fluid" alt="Camas">
+        <div class="card-body">
+          <h6 class="card-title">Camas</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-sm-4 col-md-2">
+      <div class="card categoria-card shadow-sm border-0" data-categoria="cocina">
+        <img src="img/categorias/cocina.jpg" class="card-img-top img-fluid" alt="Cocina">
+        <div class="card-body">
+          <h6 class="card-title">Cocina</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-sm-4 col-md-2">
+      <div class="card categoria-card shadow-sm border-0" data-categoria="placards">
+        <img src="img/categorias/placards.jpg" class="card-img-top img-fluid" alt="Placards">
+        <div class="card-body">
+          <h6 class="card-title">Placards</h6>
+        </div>
+      </div>
+    </div>
+    <!-- Botón para Ver Todos los productos -->
+    <div class="d-flex justify-content-center mt-4">
+      <button id="verTodosBtn" class="btn btn-outline-dark">
+        Ver todos
+      </button>
+    </div>
+    
+  </div>
+</section>
+
+<!-- FILTROS Y PRODUCTOS -->
+<section class="container mb-5">
   <div class="row">
-
     <!-- FILTROS LATERALES -->
-<div class="col-lg-3 mb-4">
-    <div class="sticky-filtros">
-      <div class="card shadow-sm p-4">
+    <div class="col-lg-3 mb-4">
+      <div class="sticky-filtros">
+        <div class="card shadow-sm p-4">
+          <h5 class="fw-bold mb-3">Filtrar productos</h5>
 
-        <h5 class="fw-bold mb-3">Filtrar productos</h5>
+          <div class="mb-3">
+            <label class="form-label">Buscar</label>
+            <input type="text" id="buscador" class="form-control" placeholder="Nombre del producto">
+          </div>
 
-        <div class="mb-3">
-          <label class="form-label">Buscar</label>
-          <input type="text" id="buscador" class="form-control" placeholder="Nombre del producto">
+          <div class="mb-3">
+            <label class="form-label">Categoría</label>
+            <select id="categoriaFiltro" class="form-select">
+              <option value="">Todas</option>
+              <option value="sillas">Sillas</option>
+              <option value="mesas">Mesas</option>
+              <option value="camas">Camas</option>
+              <option value="cocina">Cocina</option>
+              <option value="placards">Placards</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Precio mínimo</label>
+            <input type="number" id="precioMin" class="form-control" min="0">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Precio máximo</label>
+            <input type="number" id="precioMax" class="form-control" min="0">
+          </div>
+
+          <div class="d-grid">
+            <button id="limpiarFiltros" class="btn btn-dark">Limpiar filtros</button>
+          </div>
         </div>
-
-        <div class="mb-3">
-          <label class="form-label">Precio mínimo</label>
-          <input type="number" id="precioMin" class="form-control" min="0">
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Precio máximo</label>
-          <input type="number" id="precioMax" class="form-control" min="0">
-        </div>
-
-        <div class="d-grid">
-          <button id="limpiarFiltros" class="btn btn-dark">
-            Limpiar filtros
-          </button>
-        </div>
-
       </div>
     </div>
 
-  </div>
- 
-
     <!-- PRODUCTOS -->
     <div class="col-lg-9">
-      <div class="row g-4" id="contenedor-productos"></div>
+      <div class="row g-4" id="contenedor-productos">
+          
+      </div>
     </div>
-
   </div>
 </section>
 
@@ -82,13 +169,10 @@
   </div>
 </div>
 
-
-<!-- PRODUCTOS -->
- 
+<!-- Modal Producto -->
 <div class="modal fade" id="modalProducto" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content p-4" id="contenidoModalProducto">
-    </div>
+    <div class="modal-content p-4" id="contenidoModalProducto"></div>
   </div>
 </div>
 
@@ -99,8 +183,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-<!-- Tu config -->
 <script src="js/firebase.js"></script>
 
 <!-- Navbar y Footer -->
