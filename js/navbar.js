@@ -8,7 +8,7 @@ function cargarNavbar() {
       <div class="container">
 
         <a class="navbar-brand fw-bold" href="index.html">
-          Glattam Muebles 
+          Glattan Muebles 
         </a>
 
         <button class="navbar-toggler" type="button"
@@ -62,6 +62,12 @@ function cargarNavbar() {
 
       </div>
     </nav>
+
+    <!-- WhatsApp Icono flotante -->
+    <a href="https://wa.me/1234567890" target="_blank" id="whatsapp-icon">
+      <i class="bi bi-whatsapp"></i>
+    </a>
+ 
   `;
 
   document.getElementById("navbar-container").innerHTML = navbar;
@@ -226,8 +232,6 @@ console.log("esPaginaCuenta:", esPaginaCuenta);
   });
 
 }
-
-
 
 // ===========================
 // LOGOUT

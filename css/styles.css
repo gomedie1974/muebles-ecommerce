@@ -168,3 +168,29 @@ footer {
   opacity: 0.85;
 }
 
+/* Estilo del ícono de WhatsApp */
+#whatsapp-icon {
+   position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    background: #22c55e;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    color: white;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(230, 207, 207, 0.15);
+    transition: all 0.3s ease;}
+
+#whatsapp-icon:hover {
+  transform: scale(1.1); /* Efecto de agrandar al pasar el mouse */
+}
+
+#whatsapp-icon i {
+  pointer-events: none; /* Evitar que el icono se vuelva no clickeable */
+  font-size: 25px; 
+}
+ 
