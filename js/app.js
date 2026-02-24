@@ -35,10 +35,14 @@ function renderProductos(lista = productos) {
               <h5>${prod.nombre}</h5>
               <p class="fw-bold">$${prod.precio.toLocaleString()}</p>
             </div>
-            <button class="btn btn-dark w-100 mt-3"
-              onclick="agregarAlCarrito(${prod.id})">
-              Agregar al carrito
-            </button>
+          
+            <div  class="d-flex justify-content-center">
+              <button class="btn btn-dark w-90 mt-3 "
+                onclick="agregarAlCarrito(${prod.id})">
+                Agregar al <i class="bi bi-cart"></i>
+              </button>
+            </div>
+
           </div>
         </div>
       </div>
@@ -143,10 +147,17 @@ function abrirModalProducto(id) {
           <label class="fw-semibold mb-2">Cantidad</label>
           <input type="number" id="cantidadProducto" class="form-control" value="1" min="1">
         </div>
+        
+        <div class="d-flex w-100 justify-content-between">
+          <!-- Botón Agregar al Carrito -->
+          <button class="btn btn-dark w-48 py-3 fw-semibold" id="btnAgregarModal" data-precio-final="${precioBase}">
+          Agregar al <i class="bi bi-cart"></i>
+          </button>
+          
+          <!-- Botón de Volver -->
+          <button type="button" class="btn btn-primary w-48" data-bs-dismiss="modal">Volver</button>  
+        </div>
 
-        <button class="btn btn-dark w-100 py-3 fw-semibold" id="btnAgregarModal" data-precio-final="${precioBase}">
-          Agregar al carrito
-        </button>
       </div>
     </div>
   `;
