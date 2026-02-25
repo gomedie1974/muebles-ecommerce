@@ -144,12 +144,6 @@ footer {
   background: linear-gradient(180deg, #1c1c1c 0%, #111 100%);
 }
 
-.footer-title {
-  font-size: 0.9rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
 .footer-link {
   color: #ccc;
   text-decoration: none;
@@ -198,3 +192,6 @@ footer {
   font-size: 25px; 
 }
  
+.payment-logo {
+  max-height: 20px; /* O ajusta según el tamaño que prefieras */
+}
