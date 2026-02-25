@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Registro Visual | Glattam Amoblamientos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/styles.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <style>
@@ -17,9 +18,9 @@
     .container-registro {
       min-height: 100vh;
       display: flex;
-      align-items: center;
+      align-items: flex-start;;
       justify-content: center;
-      padding: 40px;
+      padding: 100px 40px 40px;
     }
 
     .card-registro {
@@ -146,6 +147,42 @@
   </div>
 </div>
 
+<!-- Modal de éxito -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">¡Éxito!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>¡Tu cuenta ha sido creada con éxito!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de error -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">¡Vaya, algo salió mal!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p id="errorMessage"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="footer"></div>
 
 <script src="js/navbar.js"></script>
@@ -184,8 +221,9 @@ document.getElementById("btnRegister").addEventListener("click", () => {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
+  // Validación de los campos
   if (!nombre || !apellido || !domicilio || !localidad || !telefono || !email || !password) {
-    alert("Por favor completá todos los campos");
+    mostrarModalError("Por favor completá todos los campos.");
     return;
   }
 
@@ -200,18 +238,33 @@ document.getElementById("btnRegister").addEventListener("click", () => {
         telefono,
         email
       }).then(() => {
-        alert("Registro exitoso!");
-        window.location.href = "index.html";
+        mostrarModalExito();
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 2000); // Redirigir después de 2 segundos
       });
     })
     .catch(error => {
       if (error.code === "auth/email-already-in-use") {
-        alert("Este correo ya está registrado. Por favor iniciá sesión o usá otro email.");
+        mostrarModalError("Este correo ya está registrado. Por favor iniciá sesión o usá otro email.");
       } else {
-        alert("Error: " + error.message);
+        mostrarModalError("Error: " + error.message);
       }
     });
 });
+
+// Función para mostrar el modal de éxito
+function mostrarModalExito() {
+  const modal = new bootstrap.Modal(document.getElementById("successModal"));
+  modal.show();
+}
+
+// Función para mostrar el modal de error
+function mostrarModalError(message) {
+  document.getElementById("errorMessage").textContent = message;
+  const modal = new bootstrap.Modal(document.getElementById("errorModal"));
+  modal.show();
+}
 
 // Mostrar/ocultar contraseña con el icono de ojo
 const eyeIcon = document.getElementById("eyeIcon");
