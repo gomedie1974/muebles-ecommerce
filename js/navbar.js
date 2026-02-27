@@ -5,17 +5,12 @@ function cargarNavbar() {
   const navbar = `
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3 fixed-top">
       <div class="container">
-
         <a class="navbar-brand fw-bold" href="index.html">
-          Glattan Muebles 
+          Glattan Muebles
         </a>
-
-        <button class="navbar-toggler" type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarContenido">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContenido">
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse justify-content-between" id="navbarContenido">
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
             <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
@@ -23,7 +18,6 @@ function cargarNavbar() {
             <li class="nav-item"><a class="nav-link" href="sobre.html">Sobre Nosotros</a></li>
             <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
           </ul>
-
           <div class="d-flex align-items-center gap-3">
             <div id="usuario-area"></div>
             <a href="carrito.html" class="nav-link position-relative">
@@ -42,7 +36,6 @@ function cargarNavbar() {
   `;
 
   document.getElementById("navbar-container").innerHTML = navbar;
-
   actualizarContadorGlobal();
 }
 
@@ -55,36 +48,28 @@ function mostrarBannerCookies() {
   const cookieHTML = `
     <div class="cookie-alert" id="cookieAlert">
       <div>
-        Este sitio usa cookies para mejorar tu experiencia. 
-        <a href="#cookie-info">Más info</a>
+        Este sitio usa cookies para mejorar tu experiencia.
       </div>
       <div>
         <button id="aceptarCookiesBtn">Aceptar todas</button>
         <button id="rechazarCookiesBtn">Rechazar todas</button>
-        <button id="configurarCookiesBtn">Configurar</button>
       </div>
     </div>
   `;
 
   document.body.insertAdjacentHTML("beforeend", cookieHTML);
 
+  const cookieAlert = document.getElementById("cookieAlert");
+
+  // Botones aceptar/rechazar
   document.getElementById("aceptarCookiesBtn").addEventListener("click", () => {
     localStorage.setItem("cookies", "aceptadas");
-    document.getElementById("cookieAlert").style.display = "none";
+    cookieAlert.style.display = "none";
   });
 
   document.getElementById("rechazarCookiesBtn").addEventListener("click", () => {
     localStorage.setItem("cookies", "rechazadas");
-    document.getElementById("cookieAlert").style.display = "none";
-  });
-
-  document.getElementById("configurarCookiesBtn").addEventListener("click", () => {
-    const configSection = document.getElementById("cookie-info");
-    if(configSection){
-      const offset = 120;
-      const top = configSection.getBoundingClientRect().top + window.pageYOffset - offset;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
+    cookieAlert.style.display = "none";
   });
 }
 
@@ -155,30 +140,11 @@ function logout(){
 }
 
 // ===========================
-// SCROLL SUAVE PARA ANCLAS
-// ===========================
-function scrollSuaveAnclas(){
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      const targetId = this.getAttribute('href').substring(1);
-      const target = document.getElementById(targetId);
-      if(target){
-        const offset = 120;
-        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
-        window.scrollTo({ top, behavior: "smooth" });
-      }
-    });
-  });
-}
-
-// ===========================
 // INICIAR
 // ===========================
 document.addEventListener("DOMContentLoaded", () => {
   cargarNavbar();
   mostrarBannerCookies();
-  scrollSuaveAnclas();
   esperarFirebaseYUsuario();
 });
 
@@ -186,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ESPERAR FIREBASE
 // ===========================
 function esperarFirebaseYUsuario(){
-  const intervalo = setInterval(()=>{
+  const intervalo = setInterval(()=> {
     const area = document.getElementById("usuario-area");
     if(typeof firebase !== "undefined" && firebase.apps.length > 0 && area){
       clearInterval(intervalo);

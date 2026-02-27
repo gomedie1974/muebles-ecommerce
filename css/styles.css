@@ -203,7 +203,7 @@ footer {
   transform: translateX(-50%);
   max-width: 950px;
   width: 90%;
-  background: #4b2e1e; /* color madera oscuro */
+  background: #000000; /* color madera oscuro */
   color: #f3eee7; /* texto claro */
   padding: 18px 25px;
   border-radius: 12px;
