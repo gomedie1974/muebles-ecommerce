@@ -16,43 +16,26 @@ function cargarNavbar() {
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse justify-content-between"
-             id="navbarContenido">
-
+        <div class="collapse navbar-collapse justify-content-between" id="navbarContenido">
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">Inicio</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="tienda.html">Tienda</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="sobre.html">Sobre Nosotros</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="contacto.html">Contacto</a>
-            </li>
+            <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="tienda.html">Tienda</a></li>
+            <li class="nav-item"><a class="nav-link" href="sobre.html">Sobre Nosotros</a></li>
+            <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
           </ul>
 
           <div class="d-flex align-items-center gap-3">
-            <!-- Usuario -->
             <div id="usuario-area"></div>
-
-            <!-- Carrito -->
             <a href="carrito.html" class="nav-link position-relative">
               <i class="bi bi-cart4 fs-4"></i>
-              <span id="contador-carrito"
-                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                0
-              </span> 
+              <span id="contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
             </a>
           </div>
-
         </div>
       </div>
     </nav>
 
-    <!-- WhatsApp Icono flotante -->
+    <!-- WhatsApp flotante -->
     <a href="https://wa.me/1234567890" target="_blank" id="whatsapp-icon">
       <i class="bi bi-whatsapp"></i>
     </a>
@@ -64,7 +47,49 @@ function cargarNavbar() {
 }
 
 // ===========================
-// CONTADOR CARRITO
+// BANNER DE COOKIES
+// ===========================
+function mostrarBannerCookies() {
+  if(localStorage.getItem("cookies")) return; // ya eligió
+
+  const cookieHTML = `
+    <div class="cookie-alert" id="cookieAlert">
+      <div>
+        Este sitio usa cookies para mejorar tu experiencia. 
+        <a href="#cookie-info">Más info</a>
+      </div>
+      <div>
+        <button id="aceptarCookiesBtn">Aceptar todas</button>
+        <button id="rechazarCookiesBtn">Rechazar todas</button>
+        <button id="configurarCookiesBtn">Configurar</button>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML("beforeend", cookieHTML);
+
+  document.getElementById("aceptarCookiesBtn").addEventListener("click", () => {
+    localStorage.setItem("cookies", "aceptadas");
+    document.getElementById("cookieAlert").style.display = "none";
+  });
+
+  document.getElementById("rechazarCookiesBtn").addEventListener("click", () => {
+    localStorage.setItem("cookies", "rechazadas");
+    document.getElementById("cookieAlert").style.display = "none";
+  });
+
+  document.getElementById("configurarCookiesBtn").addEventListener("click", () => {
+    const configSection = document.getElementById("cookie-info");
+    if(configSection){
+      const offset = 120;
+      const top = configSection.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  });
+}
+
+// ===========================
+// CONTADOR DE CARRITO
 // ===========================
 function actualizarContadorGlobal() {
   const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
@@ -83,78 +108,39 @@ function verificarUsuario(){
   if(!area) return;
 
   const paginaActual = window.location.href.toLowerCase();
-  const esPaginaCuenta =
-    paginaActual.includes("/mi-cuenta") ||
-    paginaActual.includes("/mis-pedidos");
+  const esPaginaCuenta = paginaActual.includes("/mi-cuenta") || paginaActual.includes("/mis-pedidos");
 
   if(typeof firebase === "undefined"){
-    area.innerHTML = `
-      <a href="login.html" class="nav-link fs-5">
-        <i class="bi bi-person-circle"></i>
-      </a>
-    `;
+    area.innerHTML = `<a href="login.html" class="nav-link fs-5"><i class="bi bi-person-circle"></i></a>`;
     return;
   }
 
   firebase.auth().onAuthStateChanged(async user => {
     if(user){
       try{
-        const doc = await firebase.firestore()
-          .collection("usuarios")
-          .doc(user.uid)
-          .get();
+        const doc = await firebase.firestore().collection("usuarios").doc(user.uid).get();
         const nombre = doc.exists ? doc.data().nombre : "Usuario";
 
         if(esPaginaCuenta){
-          area.innerHTML = `
-            <a href="tienda.html" class="btn btn-outline-dark btn-sm">
-              <i class="bi bi-arrow-left me-1"></i>
-              Volver a la tienda
-            </a>
-          `;
+          area.innerHTML = `<a href="tienda.html" class="btn btn-outline-dark btn-sm"><i class="bi bi-arrow-left me-1"></i>Volver a la tienda</a>`;
         } else {
           area.innerHTML = `
             <div class="dropdown">
-              <button class="btn btn-outline-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-                Hola, ${nombre}
-              </button>
+              <button class="btn btn-outline-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown">Hola, ${nombre}</button>
               <ul class="dropdown-menu dropdown-menu-end shadow">
-                <li>
-                  <a class="dropdown-item" href="mi-cuenta.html">
-                    <i class="bi bi-person me-2"></i>
-                    Mi cuenta
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="mis-pedidos.html">
-                    <i class="bi bi-bag me-2"></i>
-                    Mis pedidos
-                  </a>
-                </li>
+                <li><a class="dropdown-item" href="mi-cuenta.html"><i class="bi bi-person me-2"></i>Mi cuenta</a></li>
+                <li><a class="dropdown-item" href="mis-pedidos.html"><i class="bi bi-bag me-2"></i>Mis pedidos</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li>
-                  <button onclick="logout()" class="dropdown-item text-danger">
-                    <i class="bi bi-box-arrow-right me-2"></i>
-                    Cerrar sesión
-                  </button>
-                </li>
+                <li><button onclick="logout()" class="dropdown-item text-danger"><i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión</button></li>
               </ul>
             </div>
           `;
         }
-      } catch(error){
-        area.innerHTML = `
-          <button onclick="logout()" class="btn btn-outline-dark btn-sm">
-            <i class="bi bi-box-arrow-right"></i>
-          </button>
-        `;
+      } catch {
+        area.innerHTML = `<button onclick="logout()" class="btn btn-outline-dark btn-sm"><i class="bi bi-box-arrow-right"></i></button>`;
       }
     } else {
-      area.innerHTML = `
-        <a href="login.html" class="nav-link fs-5">
-          <i class="bi bi-person-circle"></i>
-        </a>
-      `;
+      area.innerHTML = `<a href="login.html" class="nav-link fs-5"><i class="bi bi-person-circle"></i></a>`;
     }
   });
 }
@@ -165,83 +151,39 @@ function verificarUsuario(){
 function logout(){
   localStorage.removeItem("carrito");
   localStorage.removeItem("checkout");
-  firebase.auth().signOut().then(()=>{
-    window.location.href="index.html";
-  });
-}
-
-// ===========================
-// BARRA DE COOKIES
-// ===========================
-function insertarCookieAlert(){
-  if(localStorage.getItem("cookies")) return;
-
-  const cookieHTML = `
-    <div class="cookie-alert" id="cookieAlert">
-      <div>
-        Este sitio usa cookies para mejorar tu experiencia. 
-        <a href="#cookie-info">Más info</a>
-      </div>
-      <div>
-        <button id="aceptarCookiesBtn">Aceptar todas</button>
-        <button id="rechazarCookiesBtn">Rechazar todas</button>
-        <button id="configurarCookiesBtn">Configurar</button>
-      </div>
-    </div>
-  `;
-  document.body.insertAdjacentHTML("beforeend", cookieHTML);
-
-  document.getElementById("aceptarCookiesBtn").addEventListener("click", () => {
-    localStorage.setItem("cookies", "aceptadas");
-    document.getElementById("cookieAlert").style.display = "none";
-  });
-  document.getElementById("rechazarCookiesBtn").addEventListener("click", () => {
-    localStorage.setItem("cookies", "rechazadas");
-    document.getElementById("cookieAlert").style.display = "none";
-  });
-  document.getElementById("configurarCookiesBtn").addEventListener("click", () => {
-    const configSection = document.getElementById("cookie-info");
-    if(configSection){
-      const offset = 120;
-      const elementPosition = configSection.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-    }
-  });
+  firebase.auth().signOut().then(()=>{ window.location.href="index.html"; });
 }
 
 // ===========================
 // SCROLL SUAVE PARA ANCLAS
 // ===========================
-function initSmoothScroll(){
+function scrollSuaveAnclas(){
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e){
+    anchor.addEventListener('click', function (e) {
       e.preventDefault();
       const targetId = this.getAttribute('href').substring(1);
-      const targetElement = document.getElementById(targetId);
-      if(targetElement){
+      const target = document.getElementById(targetId);
+      if(target){
         const offset = 120;
-        const elementPosition = targetElement.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - offset;
-        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top, behavior: "smooth" });
       }
     });
   });
 }
 
 // ===========================
-// INICIALIZAR TODO
+// INICIAR
 // ===========================
 document.addEventListener("DOMContentLoaded", () => {
   cargarNavbar();
-  insertarCookieAlert();
-  actualizarContadorGlobal();
+  mostrarBannerCookies();
+  scrollSuaveAnclas();
   esperarFirebaseYUsuario();
-  initSmoothScroll();
 });
 
 // ===========================
-// ESPERAR FIREBASE Y DOM
+// ESPERAR FIREBASE
 // ===========================
 function esperarFirebaseYUsuario(){
   const intervalo = setInterval(()=>{
@@ -250,5 +192,5 @@ function esperarFirebaseYUsuario(){
       clearInterval(intervalo);
       verificarUsuario();
     }
-  },100);
+  }, 100);
 }
