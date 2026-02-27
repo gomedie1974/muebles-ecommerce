@@ -76,40 +76,6 @@
     margin-bottom: 0;
   }
 
-  /* BARRA DE COOKIES */
-  .cookie-alert {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    background: #000000;
-    color: #fff;
-    padding: 15px 20px;
-    border-radius: 8px;
-    z-index: 1050;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .cookie-alert a {
-    color: #ffc107;
-    text-decoration: underline;
-  }
-
-  .cookie-alert button {
-    background: #ffc107;
-    border: none;
-    padding: 5px 15px;
-    border-radius: 5px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  /* Offset para scroll */
-  #cookie-info {
-    scroll-margin-top: 120px; /* ajusta según navbar + barra cookies */
-  }
   </style>
 </head>
 
@@ -267,27 +233,11 @@
   </div>
 </main>
 
-<!-- BARRA DE COOKIES OPCIONAL -->
-<div class="cookie-alert" id="cookieAlert">
-  Este sitio usa cookies para mejorar tu experiencia. 
-  <a href="#cookie-info">Más info</a>
-  <button onclick="aceptarCookies()">Aceptar</button>
-</div>
-
 <div id="footer"></div>
 
-<!-- SCRIPTS -->
-<script>
-  // Mostrar/ocultar barra de cookies
-  function aceptarCookies(){
-    document.getElementById('cookieAlert').style.display = 'none';
-    localStorage.setItem('cookiesAceptadas', 'true');
-  }
-  if(localStorage.getItem('cookiesAceptadas') === 'true'){
-    document.getElementById('cookieAlert').style.display = 'none';
-  }
 
-  // Scroll suave con offset para anclas
+<script>
+   // Scroll suave con offset para anclas
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
       e.preventDefault();
