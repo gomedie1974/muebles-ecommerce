@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <a href="#" class="footer-link me-3 fs-5"><i class="bi bi-instagram"></i></a>
               <a href="#" class="footer-link fs-5"><i class="bi bi-whatsapp"></i></a>
             </div>
+            <span><a href="politica-privacidad.html" class="footer-link d-block py-1 mt-4">Política de Privacidad</a></span>
           </div>
 
           <!-- MAPA -->

@@ -18,23 +18,25 @@
     .container-registro {
       min-height: 100vh;
       display: flex;
-      align-items: flex-start;;
+      align-items: flex-start;
       justify-content: center;
       padding: 100px 40px 40px;
     }
 
     .card-registro {
-      background: #fff;
+      background: #f3eee7; /* beige cálido */
       border-radius: 20px;
-      padding: 60px 50px;
+      padding: 50px 40px;
       width: 100%;
       max-width: 700px;
       box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+      border: 1px solid #e0d6c8;
     }
 
     .card-registro h3 {
-      color: #343a40;
+      color: #4b2e1e; /* madera oscura */
       margin-bottom: 35px;
+      text-align: center;
     }
 
     .input-wrapper {
@@ -47,7 +49,7 @@
       left: 15px;
       top: 50%;
       transform: translateY(-50%);
-      color: #adb5bd;
+      color: #8b7a6b;
     }
 
     .form-control {
@@ -62,28 +64,45 @@
       top: 50%;
       transform: translateY(-50%);
       cursor: pointer;
-      color: #adb5bd;
+      color: #8b7a6b;
     }
 
     .btn-registro {
-      background-color: #343a40;
+      background-color: #0d6efd; /* azul Bootstrap */
+      color: #fff;               /* texto blanco */
       border: none;
       border-radius: 10px;
       transition: 0.3s;
     }
 
     .btn-registro:hover {
-      background-color: #495057;
+      background-color: #0b5ed7; /* azul más oscuro al pasar el mouse */
+      color: #fff;
+    }
+    .form-check-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #49485c;
+      margin-bottom: 20px;
+    }
+
+    .form-check-wrapper input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #4b2e1e;
     }
 
     p.text-center a {
-      color: #343a40;
+      color: #4b2e1e;
       font-weight: 500;
       text-decoration: none;
     }
 
     p.text-center a:hover {
-      color: #495057;
+      color: #6a3f28;
     }
 
     @media (max-width: 991px) {
@@ -100,7 +119,7 @@
 
 <div class="container-registro">
   <div class="card card-registro">
-    <h3 class="text-center">Crear cuenta</h3>
+    <h3>Crear cuenta</h3>
 
     <div class="mb-3 input-wrapper">
       <i class="bi bi-person icon-input"></i>
@@ -132,14 +151,20 @@
       <input type="email" id="email" class="form-control" placeholder="Email" autocomplete="off">
     </div>
 
-    <!-- Campo de contraseña con ojito -->
     <div class="mb-3 input-wrapper">
       <i class="bi bi-lock icon-input"></i>
       <input type="password" id="password" class="form-control" placeholder="Contraseña" autocomplete="new-password">
-      <i class="bi bi-eye eye-icon" id="eyeIcon"></i> <!-- Aquí está el icono del ojo -->
+      <i class="bi bi-eye eye-icon" id="eyeIcon"></i>
     </div>
 
-    <button class="btn btn-primary w-100 mb-3" id="btnRegister">Registrarse</button>
+    <div class="form-check-wrapper">
+      <input type="checkbox" id="aceptaPolitica">
+      <label for="aceptaPolitica">
+        Acepto la <a href="politica-privacidad.html" target="_blank">Política de Privacidad</a>
+      </label>
+    </div>
+
+    <button class="btn btn-registro w-100 mb-3" id="btnRegister" disabled>Registrarse</button>
 
     <p class="text-center text-muted">
       ¿Ya tenés cuenta? <a href="login.html">Iniciar sesión</a>
@@ -196,7 +221,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script>
-// Configuración de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCU79ZWBAHThRPVp44voMXIC42zq6abS4Y",
   authDomain: "muebles-ecommerce-d8fc0.firebaseapp.com",
@@ -211,8 +235,16 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+const aceptaPolitica = document.getElementById("aceptaPolitica");
+const btnRegister = document.getElementById("btnRegister");
+
+// Habilitar botón solo si checkbox está marcado
+aceptaPolitica.addEventListener("change", () => {
+  btnRegister.disabled = !aceptaPolitica.checked;
+});
+
 // Registro de usuario
-document.getElementById("btnRegister").addEventListener("click", () => {
+btnRegister.addEventListener("click", () => {
   const nombre = document.getElementById("nombre").value.trim();
   const apellido = document.getElementById("apellido").value.trim();
   const domicilio = document.getElementById("domicilio").value.trim();
@@ -221,7 +253,6 @@ document.getElementById("btnRegister").addEventListener("click", () => {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
-  // Validación de los campos
   if (!nombre || !apellido || !domicilio || !localidad || !telefono || !email || !password) {
     mostrarModalError("Por favor completá todos los campos.");
     return;
@@ -241,7 +272,7 @@ document.getElementById("btnRegister").addEventListener("click", () => {
         mostrarModalExito();
         setTimeout(() => {
           window.location.href = "index.html";
-        }, 2000); // Redirigir después de 2 segundos
+        }, 2000);
       });
     })
     .catch(error => {
@@ -253,20 +284,18 @@ document.getElementById("btnRegister").addEventListener("click", () => {
     });
 });
 
-// Función para mostrar el modal de éxito
+// Modales
 function mostrarModalExito() {
   const modal = new bootstrap.Modal(document.getElementById("successModal"));
   modal.show();
 }
-
-// Función para mostrar el modal de error
 function mostrarModalError(message) {
   document.getElementById("errorMessage").textContent = message;
   const modal = new bootstrap.Modal(document.getElementById("errorModal"));
   modal.show();
 }
 
-// Mostrar/ocultar contraseña con el icono de ojo
+// Mostrar/ocultar contraseña
 const eyeIcon = document.getElementById("eyeIcon");
 const passwordField = document.getElementById("password");
 
